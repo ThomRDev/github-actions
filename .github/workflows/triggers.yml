@@ -1,0 +1,55 @@
+name: Triggers
+run-name: Praxis 3 Triggers!
+on:
+  push:  #PUSH
+    branches: ['main', 'aprendiendo-**']
+    paths: ['**.yml']
+  
+  # pull_request:  # PR
+  #   types: [opened, labeled]
+  #   branches: ['main', 'aprendiendo-**']
+  #   paths: ['**.yml']
+  issue_comment:
+    types: [created, edited, deleted]
+  workflow_dispatch:
+    inputs:
+      alerta: 
+        description: 'Nivel'
+        required: true
+        default: medio
+        type: choice
+        options:
+          - bajo
+          - medio
+          - alto
+      tags:
+        description: 'Opcional'
+        required: true
+        type: string
+jobs:
+  handle_pr_comment:
+    # if: github.event.issue.pull_request != null # nos aseguramos que sea un pr
+    if: github.event.issue.pull_request == null
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show issue number and title
+        run: |
+          echo "Mostrando: el issue es: #${{ github.event.issue.number }} - Título: ${{ github.event.issue.title }}"
+    # steps:
+    #   - name: Post a response
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     run: |
+    #       curl -s -H "Authorization: token $GITHUB_TOKEN" \
+    #         -X POST \
+    #         -d "{\"body\":\"Responderemos pronto\"}" \
+    #         https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments
+  hola-mundo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Definir variable
+        run: echo "USERNAME=${{ github.actor }}" >> $GITHUB_ENV
+      - name: Correr script
+        run: cd src/ && python hola_mundo.py
