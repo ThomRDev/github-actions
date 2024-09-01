@@ -1,0 +1,37 @@
+name: Saludo usando variables
+on: 
+  push
+env:
+  DIA_DE_SEMANA: Lunes
+
+jobs:
+  mostrar-variables:
+    runs-on: ubuntu-latest
+    steps:
+      - name: imprimir variables
+        run: |
+          echo "Variables de entorno:"
+          echo "DIA_DE_SEMANA=${{ env.DIA_DE_SEMANA }}"
+          echo "VARS: ${VARS}"  # Nota: `VARS` no está definido en este contexto
+
+  saludo-variables:
+    runs-on: ubuntu-latest
+    env:
+      SALUDO: Hola
+      fruta1: Manzana
+      fruta2: Pera
+      fruta3: Frutilla
+    steps:
+      - name: saludar
+        run: |
+          echo "${SALUDO}, ${NOMBRE} y ${NOMBRE2}. Hoy es ${DIA_DE_SEMANA}"
+          echo "La ${fruta1} es roja, la ${fruta2} es verde, la ${fruta3} es roja y el ${FRUTA4} es amarillo"
+          echo "USERNAME=${{ env.NOMBRE }}" >> $GITHUB_ENV
+          echo "AGE=${{ env.EDAD }}" >> $GITHUB_ENV
+          echo "LOCATION=${{ env.LOCALIDAD }}" >> $GITHUB_ENV
+          echo "COUNTRY=${{ env.PAIS }}" >> $GITHUB_ENV
+          echo "INFORMATION=${{ env.INFORMACION }}" >> $GITHUB_ENV
+        env:
+          NOMBRE2: Villanos
+          NOMBRE: "Valor predeterminado o calculado"
+          FRUTA4: Amarillo  # Definir FRUTA4 o quitar si no se usa
