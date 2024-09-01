@@ -28,7 +28,8 @@ on:
         type: string
 jobs:
   handle_pr_comment:
-    if: github.event.issue.pull_request != null
+    # if: github.event.issue.pull_request != null # nos aseguramos que sea un pr
+    if: github.event.issue.pull_request == null
     runs-on: ubuntu-latest
     steps:
       - name: Show issue number and title
